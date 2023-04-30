@@ -28,50 +28,62 @@ if (!empty($_POST)) {
     header('Location: dashboard.php');
 }
 ?>
-<?=template_header('Create')?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>$title</title>
+		<link href="css/style.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+	</head>
+	<body>
 <div class="content create">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 	<h2>Create Dump Ticket</h2>
-    <form action="create.php" method="post">
+    <form action="create.php" method="post" class="form">
+  <div class="form-group">
+    <label for="truck_number" class="form-label">Truck Number</label>
+    <select name="truck_number" id="truck_number" class="form-select">
+      <?php foreach ($trucks as $truck) { ?>
+        <option value="<?= $truck['truck_number'] ?>"><?= $truck['truck_number'] ?></option>
+      <?php } ?>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="id" class="form-label">ID</label>
+    <input type="text" name="id" id="id" class="form-control" placeholder="26" value="auto">
+  </div>
+  <div class="form-group">
+    <label for="load_id" class="form-label">Load ID</label>
+    <input type="text" name="load_id" id="load_id" class="form-control" placeholder="PW-Load-123">
+  </div>
+  <div class="form-group">
+    <label for="gross_weight" class="form-label">Gross Weight</label>
+    <input type="text" name="gross_weight" id="gross_weight" class="form-control" placeholder="Enter the truck incoming weight">
+  </div>
+  <div class="form-group">
+    <label for="tare_weight" class="form-label">Tare Weight</label>
+    <input type="text" name="tare_weight" id="tare_weight" class="form-control" placeholder="Enter the truck outgoing weight">
+  </div>
+  <div class="form-group">
+    <label for="company" class="form-label">Company</label>
+    <input type="text" name="company" id="company" class="form-control" placeholder="Priority Waste or Waste Management">
+  </div>
+  <div class="form-group">
+    <label for="date" class="form-label">Today Date</label>
+    <input type="datetime-local" name="date" id="date" class="form-control" value="<?= date('Y-m-d\TH:i') ?>">
+  </div>
+  <div class="form-group">
+    <label for="material" class="form-label">Material</label>
+    <input type="text" name="material" id="material" class="form-control" placeholder="MSW or Recycle">
+  </div>
+  <button type="submit" class="btn btn-primary">Create</button>
+</form>
 
-    <label for="truck_number">Truck Number</label>
-    <select name="truck_number" id="truck_number" style="margin-bottom: -30px; margin-left: -50px; margin-top: auto;">
-            <?php
-            // get all trucks from truck database
-            $stmt = $pdo->query('SELECT * FROM trucks');
-            $trucks = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            //loop through trucks and create option for each one
-
-            foreach ($trucks as $truck) {
-                echo '<option value="' . $truck['truck_number'] . '">' . $truck['truck_number'] . '</option>';
-            }
-            ?>
-        </select>
-        <label for="id">ID</label>
-        <label for="load_id">Load ID</label>
-
-
-        <input type="text" name="id" placeholder="26" value="auto" id="id">
-        <input type="text" name="load_id" placeholder="PW-Load-123" id="load_id">
-        
-        
-        <label for="gross_weight">Gross Weight</label>
-        
-        <input type="text" name="gross_weight" placeholder="Enter the truck incoming weight" id="gross_weight">
-        <label for="tare_weight">Tare Weight</label>
-        <label for="company">Company</label>
-        <input type="text" name="tare_weight" placeholder="Enter the truck outgoing weight" id="tare_weight">
-        <input type="text" name="company" placeholder="Priority Waste or Waste Management" id="company">
-        <label for="date">Today Date</label>
-        <label for="material">Material</label>
-        <input type="datetime-local" name="date" value="<?=date('Y-m-d\TH:i')?>" id="date">
-        <input type="text" name="material" placeholder="MSW or Recycle" id="material">
-        <input type="submit" value="Create">
-    </form>
     <?php if ($msg): ?>
     <p><?=$msg?></p>
     <?php endif; ?>
 </div>
 
-<?=template_footer()?>
+    </body>
+</html>

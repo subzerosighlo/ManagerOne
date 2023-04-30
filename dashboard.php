@@ -37,6 +37,17 @@ if (!isset($_SESSION['loggedin'])) {
 include 'inc/functions.php';
 // Connect to MySQL database
 $pdo = pdo_connect_mysql();
+// Check if a user ID and dump ticket ID were passed in the URL parameters
+if (isset($_GET['user_id']) && isset($_GET['dump_ticket_id'])) {
+    $user_id = $_GET['user_id'];
+    $dump_ticket_id = $_GET['dump_ticket_id'];
+
+    // Prepare and execute a SQL statement to assign the dump ticket to the user
+    $stmt = $pdo->prepare('UPDATE user_dump_tickets SET dump_ticket_id = :dump_ticket_id WHERE user_id = :user_id');
+    $stmt->bindParam(':dump_ticket_id', $dump_ticket_id);
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
+}
 // Get the page via GET request (URL param: page), if non exists default the page to 1
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
 // Number of records to show on each page
@@ -54,8 +65,15 @@ $num_dump_tickets = $pdo->query('SELECT COUNT(*) FROM dump_tickets')->fetchColum
 
 
 
-
-<?=template_header('Read')?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>$title</title>
+		<link href="css/style.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+	</head>
+	<body>
 
 <div class="content read">
 	<h2>Dump Tickets</h2>
@@ -87,6 +105,13 @@ $num_dump_tickets = $pdo->query('SELECT COUNT(*) FROM dump_tickets')->fetchColum
                 <td><?=$dump_ticket['company']?></td>
                 <td><?=$dump_ticket['date']?></td>
                 <td><?=$dump_ticket['material']?></td>
+                <td>
+					<form method="get">
+						<input type="hidden" name="user_id" value="<?=$user_id?>">
+						<input type="hidden" name="dump_ticket_id" value="<?=$dump_ticket['id']?>">
+						<button type="submit">Assign</button>
+					</form>
+				</td>
                
                 <td class="actions">
                     <a href="DumperOne/update.php?id=<?=$dump_ticket['id']?>" class="edit"><i class="fas fa-pen fa-xs"></i></a>
@@ -108,12 +133,13 @@ $num_dump_tickets = $pdo->query('SELECT COUNT(*) FROM dump_tickets')->fetchColum
 	</div>
 </div>
 
-<?=template_footer()?>
+
+
 
 </div>
 
 <div class="content">
-<?=template_header('Read')?>
+
 
 <?php
 $pdo = pdo_connect_mysql();
@@ -168,7 +194,7 @@ $down_truck_board = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	
 </div>
 
-<?=template_footer()?>
+
 </div>
 	</body>
 </html>
