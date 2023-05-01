@@ -70,3 +70,8 @@ body {
 .delete .yesno a:hover {
   	background-color: #32a367;
 }
+
+.btn btn-primary {
+	padding: 20px;
+	margin-bottom: -20px;
+}

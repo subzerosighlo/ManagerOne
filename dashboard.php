@@ -90,6 +90,7 @@ $num_dump_tickets = $pdo->query('SELECT COUNT(*) FROM dump_tickets')->fetchColum
                 <td>Company</td>
                 <td>Date</td>
                 <td>Material</td>
+                <td>Assign Ticket</td>
                 <td></td>
             </tr>
         </thead>

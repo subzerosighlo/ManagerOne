@@ -44,9 +44,16 @@ if (!empty($_POST)) {
   <div class="form-group">
     <label for="truck_number" class="form-label">Truck Number</label>
     <select name="truck_number" id="truck_number" class="form-select">
-      <?php foreach ($trucks as $truck) { ?>
-        <option value="<?= $truck['truck_number'] ?>"><?= $truck['truck_number'] ?></option>
-      <?php } ?>
+    <?php
+        // get all trucks from truck database
+        $stmt = $pdo->query('SELECT * FROM trucks');
+        $trucks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // loop through trucks and create option for each one
+        foreach ($trucks as $truck) {
+            echo '<option value="' . $truck['truck_number'] . '">' . $truck['truck_number'] . '</option>';
+        }
+        ?>
     </select>
   </div>
   <div class="form-group">
